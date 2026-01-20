@@ -1,8 +1,3 @@
-import { UserService } from "../services/user.js"
-import { UserRepositorySqlite } from "../repository/sqlite/user.js"
-import { CreateUserRequest } from "@repo/domain/request/user.js";
-import { type UserCreateDto, type UserDto, UserListResponseSchema, UserResponseSchema } from "@repo/domain/dto/user.dto.js";
-import { Hono } from 'hono'
 import { describeRoute, resolver } from "hono-openapi";
 import { createValidator } from "../utils/index.js";
 import {Hono} from "hono"
@@ -10,11 +5,15 @@ import {UserService} from "../services/user.js"
 import {UserRepositorySqlite} from "../repository/sqlite/user.js"
 import {CreateUserRequest} from "@repo/domain/request/user.js";
 import {zValidator} from "@hono/zod-validator"
-import type {UserCreateDto, UserDto} from "@repo/domain/dto/user.dto.js";
+import {
+    type UserCreateDto,
+    type UserDto,
+    UserListResponseSchema,
+    UserResponseSchema
+} from "@repo/domain/dto/user.dto.js";
 import {SessionService} from "../services/service.js";
 import {SessionRepositorySqlite} from "../repository/sqlite/session.js";
 import {LoginRequest} from "@repo/domain/request/login.js";
-import type {IUser} from "@repo/domain/entity/user.js";
 import {z} from "zod";
 
 const api = new Hono()
@@ -61,15 +60,12 @@ api.post('/login',zValidator('json',LoginRequest,(result,c)=> {
     if(!user) {
         return c.json({ error: "username or password is not correct." }, 400)
     }
-    let session = await sessionService.createByUserId(user.id)
+    let session = await sessionService.createByUserId(user.id!)
     return c.json({
         message : "user login successfully",
         data : session
     })
 })
-
-
-const api = new Hono()
 
 
 api.get('/users',

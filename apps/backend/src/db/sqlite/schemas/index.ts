@@ -1,6 +1,5 @@
 import type {IUserEntity} from "@repo/domain/entity/user.js";
 import { int, sqliteTable, text, type SQLiteColumnBuilderBase } from "drizzle-orm/sqlite-core";
-import { type InferSelectModel } from "drizzle-orm"
 import type {ISession} from "@repo/domain/entity/session.js";
 
 const userSchema: Record<keyof IUserEntity, SQLiteColumnBuilderBase> = {
